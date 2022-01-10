@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="Hello World, 蛰伏">
+    <meta name="keywords" content="刷题20220110, 蛰伏">
     <meta name="description" content="不要停下学习的脚步">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>Hello World | 蛰伏</title>
+    <title>刷题20220110 | 蛰伏</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -310,12 +310,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/1.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/2.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">Hello World</h1>
+                    <h1 class="description center-align post-title">刷题20220110</h1>
                 </div>
             </div>
         </div>
@@ -429,9 +429,13 @@
             <div class="row tag-cate">
                 <div class="col s7">
                     
-                          <div class="article-tag">
-                            <span class="chip bg-color">无标签</span>
-                          </div>
+                    <div class="article-tag">
+                        
+                            <a href="/tags/LeetCode/">
+                                <span class="chip bg-color">LeetCode</span>
+                            </a>
+                        
+                    </div>
                     
                 </div>
                 <div class="col s5 right-align">
@@ -443,7 +447,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2021-09-20
+                    2022-01-10
                 </div>
                 
 
@@ -464,19 +468,74 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><pre class=" language-bash"><code class="language-bash">$ hexo new <span class="token string">"My New Post"</span>
+                <h1 id="148-排序链表"><a href="#148-排序链表" class="headerlink" title="148. 排序链表"></a>148. 排序链表</h1><p>给你链表的头结点 head ，请将其按 升序 排列并返回 排序后的链表 。</p>
+<p><img src="https://assets.leetcode.com/uploads/2020/09/14/sort_list_1.jpg"></p>
+<p>输入：head = [4,2,1,3]<br>输出：[1,2,3,4]</p>
+<p>实例2<br><img src="https://assets.leetcode.com/uploads/2020/09/14/sort_list_2.jpg"><br>输入：head = [-1,5,3,4,0]<br>输出：[-1,0,3,4,5]</p>
+<p>实例三<br>输入：head = []<br>输出：[]</p>
+<p>大概思路：<br>自顶向下归并排序</p>
+<p>对链表自顶向下归并排序的过程如下。</p>
+<p>找到链表的中点，以中点为分界，将链表拆分成两个子链表。寻找链表的中点可以使用快慢指针的做法，快指针每次移动 22 步，慢指针每次移动 11 步，当快指针到达链表末尾时，慢指针指向的链表节点即为链表的中点。</p>
+<p>对两个子链表分别排序。</p>
+<p>将两个排序后的子链表合并，得到完整的排序后的链表。可以使用「21. 合并两个有序链表」的做法，将两个有序的子链表进行合并。</p>
+<p>上述过程可以通过递归实现。递归的终止条件是链表的节点个数小于或等于 11，即当链表为空或者链表只包含 11 个节点时，不需要对链表进行拆分和排序。</p>
+<p>链接：<a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/sort-list/solution/pai-xu-lian-biao-by-leetcode-solution/">https://leetcode-cn.com/problems/sort-list/solution/pai-xu-lian-biao-by-leetcode-solution/</a><br>来源：力扣（LeetCode）</p>
+<p>就是说给定一个链表之后我们要把链表递归划分，直到不能划分为止。<br><img src="https://pic.leetcode-cn.com/1640531477-KMTKpP-file_1640531478278">(来自LeetCode<br><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/sort-list/solution/jin-dao-gui-bing-pai-xu-kan-tu-jiu-dong-wz6y1/">https://leetcode-cn.com/problems/sort-list/solution/jin-dao-gui-bing-pai-xu-kan-tu-jiu-dong-wz6y1/</a>)<br>如何确定链表重点呢，我们需要使用快慢指针的方法，fast一次走两步，slow一次走一步。当fast走到结尾，slow就处于中间位置。</p>
+<blockquote>
+<p>为什么代码的{}被转译了呢</p>
+</blockquote>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">class</span> <span class="token class-name">Solution</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+    <span class="token keyword">public</span> ListNode <span class="token function">sortList</span><span class="token punctuation">(</span>ListNode head<span class="token punctuation">)</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> <span class="token function">sortList</span><span class="token punctuation">(</span>head<span class="token punctuation">,</span> null<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">public</span> ListNode <span class="token function">sortList</span><span class="token punctuation">(</span>ListNode head<span class="token punctuation">,</span> ListNode tail<span class="token punctuation">)</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>head <span class="token operator">==</span> null<span class="token punctuation">)</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+            <span class="token keyword">return</span> head<span class="token punctuation">;</span>
+        <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>head<span class="token punctuation">.</span>next <span class="token operator">==</span> tail<span class="token punctuation">)</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+            head<span class="token punctuation">.</span>next <span class="token operator">=</span> null<span class="token punctuation">;</span>
+            <span class="token keyword">return</span> head<span class="token punctuation">;</span>
+        <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+        ListNode slow <span class="token operator">=</span> head<span class="token punctuation">,</span> fast <span class="token operator">=</span> head<span class="token punctuation">;</span>
+        <span class="token keyword">while</span> <span class="token punctuation">(</span>fast <span class="token operator">!=</span> tail<span class="token punctuation">)</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+            slow <span class="token operator">=</span> slow<span class="token punctuation">.</span>next<span class="token punctuation">;</span>
+            fast <span class="token operator">=</span> fast<span class="token punctuation">.</span>next<span class="token punctuation">;</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>fast <span class="token operator">!=</span> tail<span class="token punctuation">)</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+                fast <span class="token operator">=</span> fast<span class="token punctuation">.</span>next<span class="token punctuation">;</span>
+            <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+        <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+        ListNode mid <span class="token operator">=</span> slow<span class="token punctuation">;</span>
+        ListNode list1 <span class="token operator">=</span> <span class="token function">sortList</span><span class="token punctuation">(</span>head<span class="token punctuation">,</span> mid<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        ListNode list2 <span class="token operator">=</span> <span class="token function">sortList</span><span class="token punctuation">(</span>mid<span class="token punctuation">,</span> tail<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        ListNode sorted <span class="token operator">=</span> <span class="token function">merge</span><span class="token punctuation">(</span>list1<span class="token punctuation">,</span> list2<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> sorted<span class="token punctuation">;</span>
+    <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">public</span> ListNode <span class="token function">merge</span><span class="token punctuation">(</span>ListNode head1<span class="token punctuation">,</span> ListNode head2<span class="token punctuation">)</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+     ListNode dummyHead<span class="token operator">=</span><span class="token keyword">new</span> <span class="token class-name">ListNode</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+     ListNode temp<span class="token operator">=</span>dummyHead<span class="token punctuation">,</span>temp1<span class="token operator">=</span>head1<span class="token punctuation">,</span>temp2<span class="token operator">=</span>head2<span class="token punctuation">;</span>
+     <span class="token keyword">while</span><span class="token punctuation">(</span>temp1<span class="token operator">!=</span>null <span class="token operator">&amp;&amp;</span> temp2<span class="token operator">!=</span>null<span class="token punctuation">)</span><span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+         <span class="token keyword">if</span><span class="token punctuation">(</span>temp1<span class="token punctuation">.</span>val<span class="token operator">&lt;</span>temp2<span class="token punctuation">.</span>val<span class="token punctuation">)</span><span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+             temp<span class="token punctuation">.</span>next<span class="token operator">=</span>temp1<span class="token punctuation">;</span>
+             temp1<span class="token operator">=</span>temp1<span class="token punctuation">.</span>next<span class="token punctuation">;</span>
+         <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span><span class="token keyword">else</span><span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+             temp<span class="token punctuation">.</span>next<span class="token operator">=</span>temp2<span class="token punctuation">;</span>
+             temp2<span class="token operator">=</span>temp2<span class="token punctuation">.</span>next<span class="token punctuation">;</span>
+         <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+         temp<span class="token operator">=</span>temp<span class="token punctuation">.</span>next<span class="token punctuation">;</span>
+     <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+     <span class="token keyword">if</span><span class="token punctuation">(</span>temp1<span class="token operator">!=</span>null<span class="token punctuation">)</span><span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+         temp<span class="token punctuation">.</span>next<span class="token operator">=</span>temp1<span class="token punctuation">;</span>
+     <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+     <span class="token keyword">if</span><span class="token punctuation">(</span>temp2<span class="token operator">!=</span>null<span class="token punctuation">)</span><span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+         temp<span class="token punctuation">.</span>next<span class="token operator">=</span>temp2<span class="token punctuation">;</span>
+     <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+     <span class="token keyword">return</span> dummyHead<span class="token punctuation">.</span>next<span class="token punctuation">;</span>
+    <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+    
+<span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
 </code></pre>
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><pre class=" language-bash"><code class="language-bash">$ hexo server
-</code></pre>
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><pre class=" language-bash"><code class="language-bash">$ hexo generate
-</code></pre>
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><pre class=" language-bash"><code class="language-bash">$ hexo deploy
-</code></pre>
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
 
                 
             </div>
@@ -503,7 +562,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://zhefu-jy.github.io/2021/09/20/hello-world/">https://zhefu-jy.github.io/2021/09/20/hello-world/</a>
+                    <a href="https://zhefu-jy.github.io/2022/01/10/20220110/">https://zhefu-jy.github.io/2022/01/10/20220110/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -540,7 +599,11 @@
                 <div class="post-meta__tag-list" style="display: inline-block;">
                     
                         <div class="article-tag">
-                            <span class="chip bg-color">无标签</span>
+                            
+                                <a href="/tags/LeetCode/">
+                                    <span class="chip bg-color">LeetCode</span>
+                                </a>
+                            
                         </div>
                     
                 </div>
@@ -710,17 +773,18 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
-                <a href="/2021/09/21/Mybatis/">
+                <a href="/2022/01/10/20220110/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/3.jpg" class="responsive-img" alt="Mybatis">
+                        <img src="/medias/featureimages/2.jpg" class="responsive-img" alt="刷题20220110">
                         
-                        <span class="card-title">Mybatis</span>
+                        <span class="card-title">刷题20220110</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -730,9 +794,55 @@
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2021-09-21
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2022-01-10
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-user fa-fw"></i>
+                            蛰伏
+                            
                         </span>
+                    </div>
+                </div>
+
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/LeetCode/">
+                        <span class="chip bg-color">LeetCode</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2022/01/06/Junit5/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/1.jpg" class="responsive-img" alt="Junit5">
+                        
+                        <span class="card-title">Junit5</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2022-01-06
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-user fa-fw"></i>
@@ -749,44 +859,6 @@
                     </a>
                     
                 </div>
-                
-            </div>
-        </div>
-        
-        
-        <div class="article col s12 m6" data-aos="fade-up">
-            <div class="article-badge right-badge text-color">
-                本篇&nbsp;<i class="far fa-dot-circle"></i>
-            </div>
-            <div class="card">
-                <a href="/2021/09/20/hello-world/">
-                    <div class="card-image">
-                        
-                        
-                        <img src="/medias/featureimages/1.jpg" class="responsive-img" alt="Hello World">
-                        
-                        <span class="card-title">Hello World</span>
-                    </div>
-                </a>
-                <div class="card-content article-content">
-                    <div class="summary block-with-text">
-                        
-                            
-                        
-                    </div>
-                    <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2021-09-20
-                            </span>
-                        <span class="publish-author">
-                            
-                            <i class="fas fa-user fa-fw"></i>
-                            蛰伏
-                            
-                        </span>
-                    </div>
-                </div>
-
                 
             </div>
         </div>
