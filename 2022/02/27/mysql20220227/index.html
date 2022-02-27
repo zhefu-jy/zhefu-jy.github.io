@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="mysql, 蛰伏">
+    <meta name="keywords" content="mysql视图, 蛰伏">
     <meta name="description" content="不要停下学习的脚步">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>mysql | 蛰伏</title>
+    <title>mysql视图 | 蛰伏</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -310,12 +310,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/1.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/3.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">mysql</h1>
+                    <h1 class="description center-align post-title">mysql视图</h1>
                 </div>
             </div>
         </div>
@@ -447,7 +447,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2022-02-26
+                    2022-02-27
                 </div>
                 
 
@@ -468,158 +468,104 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="多表查询练习"><a href="#多表查询练习" class="headerlink" title="多表查询练习"></a>多表查询练习</h2><p><img src="https://img-blog.csdnimg.cn/f400935118494e29bb9ad5df0f92acae.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5pmv5pmv5pmv5pmv6Imy5YiG5piOLg==,size_20,color_FFFFFF,t_70,g_se,x_16"></p>
-<blockquote>
-<p>7种join操作</p>
-</blockquote>
-<pre class=" language-sql"><code class="language-sql">
-<span class="token comment" spellcheck="true">#中图</span>
+                <h1 id="视图"><a href="#视图" class="headerlink" title="视图"></a>视图</h1><ul>
+<li>视图是一种虚拟表，本身不具有数据，占用很少的内存空间</li>
+<li>视图是建立在已有表的基础上的，视图赖以建立的表叫基表</li>
+<li>视图的创建和删除只影响视图本身，不影响对应的基表但是当对视图中的数据进行增加、删除和修改操作时，数据表中的数据会相应地发生变化，反之亦然。</li>
+<li>向视图提供数据内容的语句为select语句</li>
+<li>视图，是向用户提供基表数据的另一种表现形式。通常情况下，小型项目的数据库可以不使用视<br>图，但是在大型项目中，以及数据表比较复杂的情况下，视图的价值就凸显出来了，它可以帮助我<br>们把经常查询的结果集放到虚拟表中，提升使用效率。理解和使用起来都非常方便</li>
+</ul>
+<h2 id="创建视图的方式"><a href="#创建视图的方式" class="headerlink" title="创建视图的方式"></a>创建视图的方式</h2><pre class=" language-sql"><code class="language-sql"><span class="token keyword">create</span> <span class="token operator">or</span> replace <span class="token keyword">view</span>  视图名
+<span class="token keyword">as</span> 查询语句
 
-<span class="token keyword">select</span> employee_id<span class="token punctuation">,</span>department_name
-<span class="token keyword">from</span> employees <span class="token number">e</span> <span class="token keyword">join</span> departments <span class="token number">d</span>
-<span class="token keyword">on</span> <span class="token number">e</span><span class="token punctuation">.</span>department_id<span class="token operator">=</span><span class="token number">d</span><span class="token punctuation">.</span>department_id
+创建单表视图举例
+<span class="token keyword">CREATE</span> <span class="token keyword">VIEW</span> empvu80 ASSELECT employee_id<span class="token punctuation">,</span> last_name<span class="token punctuation">,</span> salary <span class="token keyword">FROM</span> employees <span class="token keyword">WHERE</span> department_id <span class="token operator">=</span> <span class="token number">80</span><span class="token punctuation">;</span>
 
-<span class="token comment" spellcheck="true">#左上</span>
-<span class="token keyword">SELECT</span>  employee_id<span class="token punctuation">,</span>department_name
-<span class="token keyword">FROM</span> employees <span class="token number">e</span>  <span class="token keyword">LEFT</span> <span class="token keyword">OUTER</span> <span class="token keyword">JOIN</span> departments <span class="token number">d</span>
-<span class="token keyword">ON</span> <span class="token number">e</span><span class="token punctuation">.</span><span class="token punctuation">`</span>department_id<span class="token punctuation">`</span><span class="token operator">=</span><span class="token number">d</span><span class="token punctuation">.</span><span class="token punctuation">`</span>department_id<span class="token punctuation">`</span>
+<span class="token keyword">CREATE</span> <span class="token keyword">VIEW</span> salvu50 ASSELECT employee_id ID_NUMBER<span class="token punctuation">,</span> last_name NAME<span class="token punctuation">,</span>salary<span class="token operator">*</span><span class="token number">12</span> ANN_SALARY <span class="token keyword">FROM</span> employees <span class="token keyword">WHERE</span> department_id <span class="token operator">=</span> <span class="token number">50</span><span class="token punctuation">;</span>
 
-<span class="token comment" spellcheck="true">#右上</span>
-<span class="token keyword">SELECT</span>  employee_id<span class="token punctuation">,</span>department_name
-<span class="token keyword">FROM</span> employees <span class="token number">e</span>  <span class="token keyword">right</span> <span class="token keyword">OUTER</span> <span class="token keyword">JOIN</span> departments <span class="token number">d</span>
-<span class="token keyword">ON</span> <span class="token number">e</span><span class="token punctuation">.</span><span class="token punctuation">`</span>department_id<span class="token punctuation">`</span><span class="token operator">=</span><span class="token number">d</span><span class="token punctuation">.</span><span class="token punctuation">`</span>department_id<span class="token punctuation">`</span>
+创建多表视图举例
+ <span class="token keyword">CREATE</span> <span class="token keyword">VIEW</span> empview
+ <span class="token keyword">AS</span> <span class="token keyword">SELECT</span> employee_id emp_id<span class="token punctuation">,</span>last_name NAME<span class="token punctuation">,</span>department_name <span class="token keyword">FROM</span> employees <span class="token number">e</span><span class="token punctuation">,</span>departments <span class="token number">d</span> 
+ <span class="token keyword">WHERE</span> <span class="token number">e</span><span class="token punctuation">.</span>department_id <span class="token operator">=</span> <span class="token number">d</span><span class="token punctuation">.</span>department_id<span class="token punctuation">;</span>
 
+ <span class="token keyword">CREATE</span> <span class="token keyword">VIEW</span> emp_dept <span class="token keyword">AS</span> 
+ <span class="token keyword">SELECT</span> ename<span class="token punctuation">,</span>dname 
+ <span class="token keyword">FROM</span> t_employee <span class="token keyword">LEFT</span> <span class="token keyword">JOIN</span> t_department 
+ <span class="token keyword">ON</span> t_employee<span class="token punctuation">.</span>did <span class="token operator">=</span> t_department<span class="token punctuation">.</span>did<span class="token punctuation">;</span> 
 
+ <span class="token keyword">CREATE</span> <span class="token keyword">VIEW</span> dept_sum_vu <span class="token punctuation">(</span>name<span class="token punctuation">,</span> minsal<span class="token punctuation">,</span> maxsal<span class="token punctuation">,</span> avgsal<span class="token punctuation">)</span> 
+ <span class="token keyword">AS</span> <span class="token keyword">SELECT</span> <span class="token number">d</span><span class="token punctuation">.</span>department_name<span class="token punctuation">,</span> <span class="token function">MIN</span><span class="token punctuation">(</span><span class="token number">e</span><span class="token punctuation">.</span>salary<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token function">MAX</span><span class="token punctuation">(</span><span class="token number">e</span><span class="token punctuation">.</span>salary<span class="token punctuation">)</span><span class="token punctuation">,</span><span class="token function">AVG</span><span class="token punctuation">(</span><span class="token number">e</span><span class="token punctuation">.</span>salary<span class="token punctuation">)</span> 
+ <span class="token keyword">FROM</span> employees <span class="token number">e</span><span class="token punctuation">,</span> departments <span class="token number">d</span>
+  <span class="token keyword">WHERE</span> <span class="token number">e</span><span class="token punctuation">.</span>department_id <span class="token operator">=</span> <span class="token number">d</span><span class="token punctuation">.</span>department_id 
+  <span class="token keyword">GROUP</span> <span class="token keyword">BY</span> <span class="token number">d</span><span class="token punctuation">.</span>department_name<span class="token punctuation">;</span>
 
-<span class="token comment" spellcheck="true">#左中</span>
-<span class="token keyword">SELECT</span>  employee_id<span class="token punctuation">,</span>department_name
-<span class="token keyword">FROM</span> employees <span class="token number">e</span>  <span class="token keyword">LEFT</span> <span class="token keyword">OUTER</span> <span class="token keyword">JOIN</span> departments <span class="token number">d</span>
-<span class="token keyword">ON</span> <span class="token number">e</span><span class="token punctuation">.</span><span class="token punctuation">`</span>department_id<span class="token punctuation">`</span><span class="token operator">=</span><span class="token number">d</span><span class="token punctuation">.</span><span class="token punctuation">`</span>department_id<span class="token punctuation">`</span>
-<span class="token keyword">WHERE</span> <span class="token number">d</span><span class="token punctuation">.</span><span class="token punctuation">`</span>department_id<span class="token punctuation">`</span> <span class="token operator">IS</span> <span class="token boolean">NULL</span>
+  基于视图创建视图
 
-
-
-<span class="token comment" spellcheck="true">#右中</span>
-<span class="token keyword">SELECT</span>  employee_id<span class="token punctuation">,</span>department_name
-<span class="token keyword">FROM</span> employees <span class="token number">e</span>  <span class="token keyword">RIGHT</span> <span class="token keyword">OUTER</span> <span class="token keyword">JOIN</span> departments <span class="token number">d</span>
-<span class="token keyword">ON</span> <span class="token number">e</span><span class="token punctuation">.</span><span class="token punctuation">`</span>department_id<span class="token punctuation">`</span><span class="token operator">=</span><span class="token number">d</span><span class="token punctuation">.</span><span class="token punctuation">`</span>department_id<span class="token punctuation">`</span>
-<span class="token keyword">WHERE</span> <span class="token number">e</span><span class="token punctuation">.</span><span class="token punctuation">`</span>department_id<span class="token punctuation">`</span> <span class="token operator">IS</span> <span class="token boolean">NULL</span>
-
-
-
-
-<span class="token comment" spellcheck="true">#左下  满连接</span>
-
-<span class="token keyword">SELECT</span>  employee_id<span class="token punctuation">,</span>department_name
-<span class="token keyword">FROM</span> employees <span class="token number">e</span>  <span class="token keyword">LEFT</span> <span class="token keyword">OUTER</span> <span class="token keyword">JOIN</span> departments <span class="token number">d</span>
-<span class="token keyword">ON</span> <span class="token number">e</span><span class="token punctuation">.</span><span class="token punctuation">`</span>department_id<span class="token punctuation">`</span><span class="token operator">=</span><span class="token number">d</span><span class="token punctuation">.</span><span class="token punctuation">`</span>department_id<span class="token punctuation">`</span>
-<span class="token keyword">UNION</span> <span class="token keyword">ALL</span>
-<span class="token keyword">SELECT</span>  employee_id<span class="token punctuation">,</span>department_name
-<span class="token keyword">FROM</span> employees <span class="token number">e</span>  <span class="token keyword">RIGHT</span> <span class="token keyword">OUTER</span> <span class="token keyword">JOIN</span> departments <span class="token number">d</span>
-<span class="token keyword">ON</span> <span class="token number">e</span><span class="token punctuation">.</span><span class="token punctuation">`</span>department_id<span class="token punctuation">`</span><span class="token operator">=</span><span class="token number">d</span><span class="token punctuation">.</span><span class="token punctuation">`</span>department_id<span class="token punctuation">`</span>
-<span class="token keyword">WHERE</span> <span class="token number">e</span><span class="token punctuation">.</span><span class="token punctuation">`</span>department_id<span class="token punctuation">`</span> <span class="token operator">IS</span> <span class="token boolean">NULL</span>
-
-
-
-<span class="token comment" spellcheck="true">#右下</span>
-
-<span class="token keyword">SELECT</span>  employee_id<span class="token punctuation">,</span>department_name
-<span class="token keyword">FROM</span> employees <span class="token number">e</span>  <span class="token keyword">LEFT</span> <span class="token keyword">OUTER</span> <span class="token keyword">JOIN</span> departments <span class="token number">d</span>
-<span class="token keyword">ON</span> <span class="token number">e</span><span class="token punctuation">.</span><span class="token punctuation">`</span>department_id<span class="token punctuation">`</span><span class="token operator">=</span><span class="token number">d</span><span class="token punctuation">.</span><span class="token punctuation">`</span>department_id<span class="token punctuation">`</span>
-<span class="token keyword">WHERE</span> <span class="token number">d</span><span class="token punctuation">.</span><span class="token punctuation">`</span>department_id<span class="token punctuation">`</span> <span class="token operator">IS</span> <span class="token boolean">NULL</span>
-<span class="token keyword">UNION</span> <span class="token keyword">ALL</span>
-<span class="token keyword">SELECT</span>  employee_id<span class="token punctuation">,</span>department_name
-<span class="token keyword">FROM</span> employees <span class="token number">e</span>  <span class="token keyword">RIGHT</span> <span class="token keyword">OUTER</span> <span class="token keyword">JOIN</span> departments <span class="token number">d</span>
-<span class="token keyword">ON</span> <span class="token number">e</span><span class="token punctuation">.</span><span class="token punctuation">`</span>department_id<span class="token punctuation">`</span><span class="token operator">=</span><span class="token number">d</span><span class="token punctuation">.</span><span class="token punctuation">`</span>department_id<span class="token punctuation">`</span>
-<span class="token keyword">WHERE</span> <span class="token number">e</span><span class="token punctuation">.</span><span class="token punctuation">`</span>department_id<span class="token punctuation">`</span> <span class="token operator">IS</span> <span class="token boolean">NULL</span>
+   <span class="token keyword">CREATE</span> <span class="token keyword">VIEW</span> emp_dept_ysalary <span class="token keyword">AS</span>
+   <span class="token keyword">SELECT</span> emp_dept<span class="token punctuation">.</span>ename<span class="token punctuation">,</span>dname<span class="token punctuation">,</span>year_salary
+   <span class="token keyword">FROM</span> emp_dept <span class="token keyword">INNER</span> <span class="token keyword">JOIN</span> emp_year_salary 
+   <span class="token keyword">ON</span> emp_dept<span class="token punctuation">.</span>ename <span class="token operator">=</span> emp_year_salary<span class="token punctuation">.</span>ename<span class="token punctuation">;</span>
 </code></pre>
-<h2 id="多表查询练习-1"><a href="#多表查询练习-1" class="headerlink" title="多表查询练习"></a>多表查询练习</h2><p><img src="https://img-blog.csdnimg.cn/d23a661d39bf412e861e414aff3475ea.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5pmv5pmv5pmv5pmv6Imy5YiG5piOLg==,size_20,color_FFFFFF,t_70,g_se,x_16"></p>
-<p>表结构</p>
-<p><img src="https://img-blog.csdnimg.cn/c275c559e1c94365a2b462d8fde8c289.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5pmv5pmv5pmv5pmv6Imy5YiG5piOLg==,size_9,color_FFFFFF,t_70,g_se,x_16"><br><img src="https://img-blog.csdnimg.cn/43257976b6e94bf2b31c170d0b48a48e.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5pmv5pmv5pmv5pmv6Imy5YiG5piOLg==,size_8,color_FFFFFF,t_70,g_se,x_16"><br><img src="https://img-blog.csdnimg.cn/e116209aaddd4589b76af1635c4b1aac.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5pmv5pmv5pmv5pmv6Imy5YiG5piOLg==,size_9,color_FFFFFF,t_70,g_se,x_16"></p>
-<h3 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h3><pre class=" language-sql"><code class="language-sql">
-<span class="token number">1</span><span class="token punctuation">.</span>显示所有员工的姓名，部门号和部门名称。
+<p>查看视图</p>
+<pre class=" language-sql"><code class="language-sql"> 语法<span class="token number">1</span>：查看数据库的表对象、视图对象
+ <span class="token keyword">show</span> <span class="token keyword">tables</span>
+ 语法<span class="token number">2</span>：查看视图的结构
+ <span class="token keyword">DESC</span> <span class="token operator">/</span> <span class="token keyword">DESCRIBE</span> 视图名称<span class="token punctuation">;</span>
 
-<span class="token keyword">select</span> <span class="token number">e</span><span class="token punctuation">.</span>last_name<span class="token punctuation">,</span><span class="token number">e</span><span class="token punctuation">.</span>department_id<span class="token punctuation">,</span><span class="token number">d</span><span class="token punctuation">.</span>department_name
-<span class="token keyword">from</span> employees  <span class="token number">e</span> <span class="token keyword">left</span> <span class="token keyword">join</span> departments <span class="token number">d</span>
-<span class="token keyword">on</span> <span class="token number">e</span><span class="token punctuation">.</span>department_id<span class="token operator">=</span><span class="token number">d</span><span class="token punctuation">.</span>department_id
+ 语法<span class="token number">3</span>：查看视图的属性信息
+  查看视图信息（显示数据表的存储引擎、版本、数据行数和数据大小等） 
+  <span class="token keyword">SHOW</span> <span class="token keyword">TABLE</span> <span class="token keyword">STATUS</span> <span class="token operator">LIKE</span> <span class="token string">'视图名称'</span>\G
 
-<span class="token number">2</span><span class="token punctuation">.</span>查询<span class="token number">90</span>号部门员工的job_id和<span class="token number">90</span>号部门的location_id
-
-<span class="token keyword">select</span> job_id<span class="token punctuation">,</span>location_id
-<span class="token keyword">from</span> employees  <span class="token number">e</span> <span class="token keyword">join</span> department_id <span class="token number">d</span>
-<span class="token keyword">on</span> <span class="token number">e</span><span class="token punctuation">.</span>department_id<span class="token operator">=</span><span class="token number">d</span><span class="token punctuation">.</span>department_id
-<span class="token keyword">where</span> <span class="token number">e</span><span class="token punctuation">.</span>department_id<span class="token operator">=</span><span class="token number">90</span>
-
-
-
-<span class="token number">3</span><span class="token punctuation">.</span>选择所有有奖金的员工的 last_name <span class="token punctuation">,</span> department_name <span class="token punctuation">,</span> location_id <span class="token punctuation">,</span> city
-
-<span class="token keyword">select</span> last_name<span class="token punctuation">,</span>department_name<span class="token punctuation">,</span>location_id<span class="token punctuation">,</span>city
-<span class="token keyword">from</span>  employees <span class="token number">e</span> <span class="token keyword">left</span> <span class="token keyword">join</span> departments <span class="token number">d</span>
-<span class="token keyword">on</span> <span class="token number">e</span><span class="token punctuation">.</span>department_id<span class="token operator">=</span><span class="token number">d</span><span class="token punctuation">.</span>department_id
-<span class="token keyword">left</span> <span class="token keyword">join</span> locations l
-<span class="token keyword">on</span> <span class="token number">d</span><span class="token punctuation">.</span>location_id<span class="token operator">=</span>l<span class="token punctuation">.</span>location_id
-<span class="token keyword">where</span> <span class="token number">e</span><span class="token punctuation">.</span>commission_pct <span class="token operator">is</span> <span class="token operator">not</span> <span class="token boolean">null</span>
-
-
-<span class="token keyword">SELECT</span> <span class="token number">e</span><span class="token punctuation">.</span>last_name <span class="token punctuation">,</span><span class="token number">e</span><span class="token punctuation">.</span><span class="token punctuation">`</span>commission_pct<span class="token punctuation">`</span><span class="token punctuation">,</span> <span class="token number">d</span><span class="token punctuation">.</span>department_name <span class="token punctuation">,</span> <span class="token number">d</span><span class="token punctuation">.</span>location_id <span class="token punctuation">,</span> l<span class="token punctuation">.</span>city
-<span class="token keyword">FROM</span> employees <span class="token number">e</span> <span class="token keyword">LEFT</span> <span class="token keyword">JOIN</span> departments <span class="token number">d</span>
-<span class="token keyword">ON</span> <span class="token number">e</span><span class="token punctuation">.</span><span class="token punctuation">`</span>department_id<span class="token punctuation">`</span> <span class="token operator">=</span> <span class="token number">d</span><span class="token punctuation">.</span><span class="token punctuation">`</span>department_id<span class="token punctuation">`</span>
-<span class="token keyword">LEFT</span> <span class="token keyword">JOIN</span> locations l
-<span class="token keyword">ON</span> <span class="token number">d</span><span class="token punctuation">.</span><span class="token punctuation">`</span>location_id<span class="token punctuation">`</span> <span class="token operator">=</span> l<span class="token punctuation">.</span><span class="token punctuation">`</span>location_id<span class="token punctuation">`</span>
-<span class="token keyword">WHERE</span> <span class="token number">e</span><span class="token punctuation">.</span><span class="token punctuation">`</span>commission_pct<span class="token punctuation">`</span> <span class="token operator">IS</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">#也应该是35条记录</span>
-
-
-<span class="token number">4</span><span class="token punctuation">.</span>选择city在Toronto工作的员工的 last_name <span class="token punctuation">,</span> job_id <span class="token punctuation">,</span> 
-<span class="token keyword">select</span> <span class="token number">e</span><span class="token punctuation">.</span>last_name<span class="token punctuation">,</span><span class="token number">e</span><span class="token punctuation">.</span>job_id
-<span class="token keyword">from</span> employees <span class="token number">e</span>  <span class="token keyword">join</span> departments <span class="token number">d</span>
-<span class="token keyword">on</span> <span class="token number">e</span><span class="token punctuation">.</span>department_id<span class="token operator">=</span><span class="token number">d</span><span class="token punctuation">.</span>department_id
-<span class="token keyword">join</span> locations l
-<span class="token keyword">on</span> <span class="token number">d</span><span class="token punctuation">.</span>location_id<span class="token operator">=</span>l<span class="token punctuation">.</span>location_id
-<span class="token keyword">where</span> l<span class="token punctuation">.</span>city<span class="token operator">=</span><span class="token string">'Toronto'</span>
-
-<span class="token number">5</span><span class="token punctuation">.</span>查询员工所在的部门名称、部门地址、姓名、工作、工资，其中员工所在部门的部门名称为’Executive’
- <span class="token keyword">select</span> <span class="token number">d</span><span class="token punctuation">.</span>department_name<span class="token punctuation">,</span>l<span class="token punctuation">.</span>street_address<span class="token punctuation">,</span><span class="token number">e</span><span class="token punctuation">.</span>last_name<span class="token punctuation">,</span><span class="token number">e</span><span class="token punctuation">.</span>job_id<span class="token punctuation">,</span><span class="token number">e</span><span class="token punctuation">.</span>salary
- <span class="token keyword">from</span> employees <span class="token number">e</span> <span class="token keyword">left</span> <span class="token keyword">join</span> departments <span class="token number">d</span>
- <span class="token keyword">on</span> <span class="token number">e</span><span class="token punctuation">.</span>department_id<span class="token operator">=</span><span class="token number">d</span><span class="token punctuation">.</span>department_id
- <span class="token keyword">left</span> <span class="token keyword">join</span> location_id
- <span class="token keyword">on</span>  <span class="token number">d</span><span class="token punctuation">.</span>location_id<span class="token operator">=</span>l<span class="token punctuation">.</span>location_id
- <span class="token keyword">where</span> department_name<span class="token operator">=</span><span class="token string">'Executive'</span>
-
-<span class="token number">6</span><span class="token punctuation">.</span>选择指定员工的姓名，员工号，以及他的管理者的姓名和员工号，结果类似于下面的格式
-employees    Emp<span class="token comment" spellcheck="true">#    manager    Mgr#</span>
-kochhar        <span class="token number">101</span>    king    <span class="token number">100</span>
-
-<span class="token keyword">select</span> <span class="token number">e</span><span class="token punctuation">.</span>last_name <span class="token string">"employees"</span><span class="token punctuation">,</span><span class="token number">e</span><span class="token punctuation">.</span>employee_id <span class="token string">"Emp"</span><span class="token punctuation">,</span>l<span class="token punctuation">.</span>last_name <span class="token string">"mageger"</span> <span class="token punctuation">,</span>l<span class="token punctuation">.</span>employee_id <span class="token string">"Mgr"</span>
-<span class="token keyword">from</span> employees <span class="token number">e</span> <span class="token keyword">left</span> <span class="token keyword">join</span> employees  l
-<span class="token keyword">on</span> <span class="token number">e</span><span class="token punctuation">.</span>manager_id <span class="token operator">=</span>l<span class="token punctuation">.</span>employee_id
-
- <span class="token number">7</span><span class="token punctuation">.</span>查询哪些部门没有员工<span class="token punctuation">(</span>重点<span class="token punctuation">)</span>
-
-<span class="token keyword">SELECT</span> <span class="token number">d</span><span class="token punctuation">.</span>department_id
-<span class="token keyword">FROM</span> departments <span class="token number">d</span> <span class="token keyword">LEFT</span> <span class="token keyword">JOIN</span> employees <span class="token number">e</span>
-<span class="token keyword">ON</span> <span class="token number">d</span><span class="token punctuation">.</span><span class="token punctuation">`</span>department_id<span class="token punctuation">`</span> <span class="token operator">=</span> <span class="token number">e</span><span class="token punctuation">.</span><span class="token punctuation">`</span>department_id<span class="token punctuation">`</span>
-<span class="token keyword">WHERE</span> <span class="token number">e</span><span class="token punctuation">.</span><span class="token punctuation">`</span>department_id<span class="token punctuation">`</span> <span class="token operator">IS</span> <span class="token boolean">NULL</span><span class="token punctuation">;</span>
-
-
-
-
- <span class="token number">8</span><span class="token punctuation">.</span> 查询哪个城市没有部门 
-<span class="token keyword">SELECT</span> l<span class="token punctuation">.</span>location_id<span class="token punctuation">,</span>l<span class="token punctuation">.</span>city
-<span class="token keyword">FROM</span> locations l <span class="token keyword">left</span> <span class="token keyword">JOIN</span> departments <span class="token number">d</span>
-<span class="token keyword">ON</span> l<span class="token punctuation">.</span><span class="token punctuation">`</span>location_id<span class="token punctuation">`</span> <span class="token operator">=</span> <span class="token number">d</span><span class="token punctuation">.</span><span class="token punctuation">`</span>location_id<span class="token punctuation">`</span>
-<span class="token keyword">WHERE</span> <span class="token number">d</span><span class="token punctuation">.</span><span class="token punctuation">`</span>location_id<span class="token punctuation">`</span> <span class="token operator">IS</span> <span class="token boolean">NULL</span><span class="token punctuation">;</span>
-
-
-
-
-<span class="token number">9</span><span class="token punctuation">.</span> 查询部门名为 Sales 或 IT 的员工信息
-
-<span class="token keyword">select</span> <span class="token number">e</span><span class="token punctuation">.</span>employee_id<span class="token punctuation">,</span><span class="token number">e</span><span class="token punctuation">.</span>last_name<span class="token punctuation">,</span><span class="token number">e</span><span class="token punctuation">.</span>department_id
-<span class="token keyword">from</span> employees <span class="token number">e</span> <span class="token keyword">join</span>  departments <span class="token number">d</span>
-<span class="token keyword">on</span> <span class="token number">e</span><span class="token punctuation">.</span><span class="token punctuation">`</span>department_id<span class="token punctuation">`</span><span class="token operator">=</span><span class="token number">d</span><span class="token punctuation">.</span><span class="token punctuation">`</span>department_id<span class="token punctuation">`</span>
-<span class="token keyword">where</span> <span class="token number">d</span><span class="token punctuation">.</span><span class="token punctuation">`</span>department_name<span class="token punctuation">`</span> <span class="token operator">in</span><span class="token punctuation">(</span><span class="token string">'Sales'</span><span class="token punctuation">,</span><span class="token string">'IT'</span><span class="token punctuation">)</span>
+  语法<span class="token number">4</span>：查看视图的详细定义信息
+  <span class="token keyword">SHOW</span> <span class="token keyword">CREATE</span> <span class="token keyword">VIEW</span> 视图名称<span class="token punctuation">;</span>
 </code></pre>
+<p>  不可更新视图的情况要使视图可更新，视图中的行和底层基本表中的行之间必须存在 一对一 的关系。另外当视图定义出现如下情况时，视图不支持更新操作：</p>
+<ul>
+<li>在定义视图的时候指定了“ALGORITHM = TEMPTABLE”，视图将不支持INSERT和DELETE操作；</li>
+<li>视图中不包含基表中所有被定义为非空又未指定默认值的列，视图将不支持INSERT操作；</li>
+<li>在定义视图的SELECT语句中使用了 JOIN联合查询 ，视图将不支持INSERT和DELETE操作；</li>
+<li>在定义视图的SELECT语句后的字段列表中使用了 数学表达式 或 子查询 ，视图将不支持INSERT，也</li>
+<li>不支持UPDATE使用了数学表达式、子查询的字段值；</li>
+<li>在定义视图的SELECT语句后的字段列表中使用 DISTINCT 、 聚合函数 、 GROUP BY 、 HAVING 、 UNION 等，视图将不支持INSERT、UPDATE、DELETE；</li>
+<li>在定义视图的SELECT语句中包含了子查询，而子查询中引用了FROM后面的表，视图将不支持 INSERT、UPDATE、DELETE；</li>
+<li>视图定义基于一个 不可更新视图 ；</li>
+<li>常量视图。</li>
+</ul>
+<h2 id="修改视图删除视图"><a href="#修改视图删除视图" class="headerlink" title="修改视图删除视图"></a>修改视图删除视图</h2><pre class=" language-sql"><code class="language-sql">方式<span class="token number">1</span>：使用<span class="token keyword">CREATE</span> <span class="token operator">OR</span> REPLACE <span class="token keyword">VIEW</span> 子句修改视图
+
+<span class="token keyword">CREATE</span> <span class="token operator">OR</span> REPLACE <span class="token keyword">VIEW</span> empvu80 <span class="token punctuation">(</span>id_number<span class="token punctuation">,</span> name<span class="token punctuation">,</span> sal<span class="token punctuation">,</span> department_id<span class="token punctuation">)</span> 
+<span class="token keyword">AS</span> <span class="token keyword">SELECT</span> employee_id<span class="token punctuation">,</span> first_name <span class="token operator">||</span> <span class="token string">' '</span> <span class="token operator">||</span> last_name<span class="token punctuation">,</span> salary<span class="token punctuation">,</span> department_id 
+<span class="token keyword">FROM</span> employees 
+<span class="token keyword">WHERE</span> department_id <span class="token operator">=</span> <span class="token number">80</span><span class="token punctuation">;</span>
+
+方式<span class="token number">2</span>
+<span class="token keyword">ALTER</span> <span class="token keyword">VIEW</span> 视图名称 <span class="token keyword">AS</span>查询语句
+
+删除视图
+删除视图只是删除视图的定义，并不会删除基表的数据。
+<span class="token keyword">DROP</span> <span class="token keyword">VIEW</span> <span class="token keyword">IF</span> <span class="token keyword">EXISTS</span> 视图名称<span class="token punctuation">;</span>
+</code></pre>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><h3 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h3><ul>
+<li>操作简单</li>
+</ul>
+<p>将经常使用的查询操作定义为视图，可以使开发人员不需要关心视图对应的数据表的结构、表与表之间<br>的关联关系，也不需要关心数据表之间的业务逻辑和查询条件，而只需要简单地操作视图即可，极大简<br>化了开发人员对数据库的操作。</p>
+<ul>
+<li>减少数据冗余</li>
+</ul>
+<p>视图跟实际数据表不一样，它存储的是查询语句。所以，在使用的时候，我们要通过定义视图的查询语句来获取结果集。而视图本身不存储数据，不占用数据存储的资源，减少了数据冗余。</p>
+<ul>
+<li> 数据安全</li>
+</ul>
+<p>  MySQL将用户对数据的 访问限制 在某些数据的结果集上，而这些数据的结果集可以使用视图来实现。用<br>户不必直接查询或操作数据表。这也可以理解为视图具有 隔离性 。视图相当于在用户和实际的数据表之间加了一层虚拟表同时，MySQL可以根据权限将用户对数据的访问限制在某些视图上，用户不需要查询数据表，可以直接通过视图获取数据表中的信息。这在一定程度上保障了数据表中数据的安全性。</p>
+<ul>
+<li><p>适应灵活多变的需求</p>
+<p>当业务系统的需求发生变化后，如果需要改动数据表的结构，则工作量相对较<br>大，可以使用视图来减少改动的工作量。这种方式在实际工作中使用得比较多。</p>
+</li>
+<li><p>能够分解复杂的查询逻辑</p>
+<p>数据库中如果存在复杂的查询逻辑，则可以将问题进行分解，创建多个视图<br>获取数据，再将创建的多个视图结合起来，完成复杂的查询逻辑</p>
+</li>
+</ul>
+<h2 id="不足"><a href="#不足" class="headerlink" title="不足"></a>不足</h2><p>如果我们在实际数据表的基础上创建了视图，那么，如果实际数据表的结构变更了，我们就需要及时对相关的视图进行相应的维护。特别是嵌套的视图（就是在视图的基础上创建视图），维护会变得比较复杂，可读性不好 ，容易变成系统的潜在隐患。因为创建视图的 SQL 查询可能会对字段重命名，也可能包含复杂的逻辑，这些都会增加维护的成本。<br>实际项目中，如果视图过多，会导致数据库维护成本的问题。所以，在创建视图的时候，你要结合实际项目需求，综合考虑视图的优点和不足，这样才能正确使用视图，使系统整体达到最优</p>
 
                 
             </div>
@@ -646,7 +592,7 @@ kochhar        <span class="token number">101</span>    king    <span class="tok
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://zhefu-jy.github.io/2022/02/26/mysql20220226/">https://zhefu-jy.github.io/2022/02/26/mysql20220226/</a>
+                    <a href="https://zhefu-jy.github.io/2022/02/27/mysql20220227/">https://zhefu-jy.github.io/2022/02/27/mysql20220227/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -857,9 +803,10 @@ kochhar        <span class="token number">101</span>    king    <span class="tok
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
                 <a href="/2022/02/27/mysql20220227/">
                     <div class="card-image">
@@ -877,9 +824,9 @@ kochhar        <span class="token number">101</span>    king    <span class="tok
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2022-02-27
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2022-02-27
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-user fa-fw"></i>
@@ -888,6 +835,7 @@ kochhar        <span class="token number">101</span>    king    <span class="tok
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
@@ -906,13 +854,13 @@ kochhar        <span class="token number">101</span>    king    <span class="tok
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2022/02/21/sentinel/">
+                <a href="/2022/02/26/mysql20220226/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/3.jpg" class="responsive-img" alt="sentinel">
+                        <img src="/medias/featureimages/1.jpg" class="responsive-img" alt="mysql">
                         
-                        <span class="card-title">sentinel</span>
+                        <span class="card-title">mysql</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -923,7 +871,7 @@ kochhar        <span class="token number">101</span>    king    <span class="tok
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2022-02-21
+                                <i class="far fa-clock fa-fw icon-date"></i>2022-02-26
                             </span>
                         <span class="publish-author">
                             
@@ -936,8 +884,8 @@ kochhar        <span class="token number">101</span>    king    <span class="tok
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/">
-                        <span class="chip bg-color">中间件</span>
+                    <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/">
+                        <span class="chip bg-color">数据库</span>
                     </a>
                     
                 </div>
