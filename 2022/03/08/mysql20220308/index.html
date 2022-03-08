@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="mysql锁, 蛰伏">
+    <meta name="keywords" content="mysql事务隔离级别, 蛰伏">
     <meta name="description" content="不要停下学习的脚步">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>mysql锁 | 蛰伏</title>
+    <title>mysql事务隔离级别 | 蛰伏</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -310,12 +310,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/0.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/4.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">mysql锁</h1>
+                    <h1 class="description center-align post-title">mysql事务隔离级别</h1>
                 </div>
             </div>
         </div>
@@ -447,7 +447,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2022-03-07
+                    2022-03-08
                 </div>
                 
 
@@ -468,65 +468,59 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="锁"><a href="#锁" class="headerlink" title="锁"></a>锁</h1><h2 id="mysql并发事务访问相同记录"><a href="#mysql并发事务访问相同记录" class="headerlink" title="mysql并发事务访问相同记录"></a>mysql并发事务访问相同记录</h2><h3 id="2-1-读读情况"><a href="#2-1-读读情况" class="headerlink" title="2.1 读读情况"></a><strong>2.1</strong> <strong>读读情况</strong></h3><p>读-读 情况，即并发事务相继 读取相同的记录 。读取操作本身不会对记录有任何影响，并不会引起什么问题，所以允许这种情况的发生。</p>
-<h3 id="2-2-写写情况"><a href="#2-2-写写情况" class="headerlink" title="2.2 写写情况"></a><strong>2.2</strong> <strong>写写情况</strong></h3><p>写-写 情况，即并发事务相继对相同的记录做出改动。</p>
-<p><strong>脏写:</strong></p>
-<p>A,B同时操作某一条记录，A对改记录修改，原来值为1改为2了，但是B这是也对改记录进行修改 改为3但是B将事务回滚了，这是就发生了脏写</p>
-<p>在这种情况下会发生 脏写 的问题，任何一种隔离级别都不允许这种问题的发生。所以在多个未提交事务相继对一条记录做改动时，需要让它们 <strong>排队执行</strong> ，这个排队的过程其实是通过 锁 来实现的。这个所谓的锁其实是一个 内存中的结构 ，在事务执行前本来是没有锁的，也就是说一开始是没有 锁结构 和记录进行关联的，如图所示：</p>
-<p>当一个事务想对这条记录做改动时，首先会看看内存中有没有与这条记录关联的 锁结构 ，当没有的时候就会在内存中生成一个 锁结构 与之关联。比如，事务 T1 要对这条记录做改动，就需要生成一个 锁结构与之关联：<br><img src="https://img-blog.csdnimg.cn/ab6f216baa8848fd8c6f618013497562.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5pmv5pmv5pmv5pmv6Imy5YiG5piOLg==,size_20,color_FFFFFF,t_70,g_se,x_16"></p>
-<p>一个事务对应一个锁结构，当前事务没结束是，另一个事务又来这是会再次生成一个锁结构<br><img src="https://img-blog.csdnimg.cn/f9da069d10304e3eaa5c25d3af4c5f40.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5pmv5pmv5pmv5pmv6Imy5YiG5piOLg==,size_20,color_FFFFFF,t_70,g_se,x_16"><br><img src="https://img-blog.csdnimg.cn/b51679fdd64b468caf7ccb5ea2436e1d.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5pmv5pmv5pmv5pmv6Imy5YiG5piOLg==,size_20,color_FFFFFF,t_70,g_se,x_16"><br><img src="https://img-blog.csdnimg.cn/5d146b7afb504b6685895cad5879c1ec.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5pmv5pmv5pmv5pmv6Imy5YiG5piOLg==,size_20,color_FFFFFF,t_70,g_se,x_16"></p>
-<h3 id="2-3-读写"><a href="#2-3-读写" class="headerlink" title="2.3 读写"></a>2.3 读写</h3><p>读-写 或 写-读 即一个事务进行读取操作，另一个进行改动操作。这种情况下可能发生脏读 ，不可重复读 幻读的问题。</p>
-<p>各个数据库厂商对SQL标准 的支持都可能不一样。比如MySQL在REPEATABLE READ 隔离级别上就已经解决了幻读问题。</p>
-<h3 id="2-4解决方案"><a href="#2-4解决方案" class="headerlink" title="2.4解决方案"></a>2.4解决方案</h3><p><img src="https://img-blog.csdnimg.cn/97568e9194c64e138f9f23681264eefa.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5pmv5pmv5pmv5pmv6Imy5YiG5piOLg==,size_20,color_FFFFFF,t_70,g_se,x_16"><br><img src="https://img-blog.csdnimg.cn/1c91e6f33124425bb66d91d3523c0053.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5pmv5pmv5pmv5pmv6Imy5YiG5piOLg==,size_20,color_FFFFFF,t_70,g_se,x_16"></p>
-<h2 id="从数据操作的类型划分：读锁-写锁"><a href="#从数据操作的类型划分：读锁-写锁" class="headerlink" title="从数据操作的类型划分：读锁  写锁"></a>从数据操作的类型划分：读锁  写锁</h2><p><img src="https://img-blog.csdnimg.cn/c0e309a9782b40648745ccf7ec5d00f9.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5pmv5pmv5pmv5pmv6Imy5YiG5piOLg==,size_20,color_FFFFFF,t_70,g_se,x_16"><br><img src="https://img-blog.csdnimg.cn/9f5f804282a64b15b1c4d15e70cced4b.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5pmv5pmv5pmv5pmv6Imy5YiG5piOLg==,size_20,color_FFFFFF,t_70,g_se,x_16"></p>
-<h3 id="锁定读"><a href="#锁定读" class="headerlink" title="锁定读"></a>锁定读</h3><p><img src="https://img-blog.csdnimg.cn/5b4f07e3a4c244faae44c46ef310ade1.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5pmv5pmv5pmv5pmv6Imy5YiG5piOLg==,size_20,color_FFFFFF,t_70,g_se,x_16"></p>
-<pre class=" language-sql"><code class="language-sql"><span class="token keyword">select</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token keyword">from</span> 表名  <span class="token keyword">lock</span> <span class="token operator">in</span> <span class="token keyword">share mode</span>  <span class="token comment" spellcheck="true">//为读取到的数据添加共享锁</span>
-<span class="token keyword">select</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token keyword">from</span>  表名  <span class="token keyword">for</span> <span class="token keyword">update</span>  <span class="token comment" spellcheck="true">//加排它锁</span>
-</code></pre>
-<pre class=" language-sql"><code class="language-sql"><span class="token comment" spellcheck="true">#事务1</span>
+                <h2 id="四种隔离级别"><a href="#四种隔离级别" class="headerlink" title="四种隔离级别"></a>四种隔离级别</h2><p>我们愿意舍弃一部分隔离性来换取一部分性能在这里就体现在：设立一些隔离级别隔离级别越低并发问题发生的就越多。 </p>
+<p>SQL标准 中设立了4个 隔离级别 ： </p>
+<p>READ UNCOMMITTED ：读未提交，在该隔离级别，所有事务都可以看到其他未提交事务的执行结果。不能避免脏读、不可重复读、幻读。</p>
+<p>READ COMMITTED ：读已提交，它满足了隔离的简单定义：一个事务只能看见已经提交事务所做的改变。这是大多数数据库系统的默认隔离级别（但不是MySQL默认的）。可以避免脏读，但不可重复读、幻读问题仍然存在。</p>
+<p>REPEATABLE READ ：可重复读，事务A在读到一条数据之后，此时事务B对该数据进行了修改并提交，那么事务A再读该数据，读到的还是原来的内容。可以避免脏读、不可重复读，但幻读问题仍然存在。这是MySQL的默认隔离级别。</p>
+<p>SERIALIZABLE ：可串行化，确保事务可以从一个表中读取相同的行。在这个事务持续期间，禁止其他事务对该表执行插入、更新和删除操作。所有的并发问题都可以避免，但性能十分低下。能避免脏读、不可重复读和幻读。</p>
+<h2 id="不可重复读问题"><a href="#不可重复读问题" class="headerlink" title="不可重复读问题"></a>不可重复读问题</h2><p>在读已提交的事务隔离级别并没有解决不可重复读的问题</p>
+<p>测试</p>
+<pre class=" language-sql"><code class="language-sql"><span class="token comment" spellcheck="true">#设置事务隔离级别  设置为读已提交</span>
+<span class="token keyword">SET</span>  <span class="token keyword">SESSION</span> transaction_isolation <span class="token operator">=</span><span class="token string">'READ-COMMITTED'</span>
+
+
+<span class="token comment" spellcheck="true">#查看事务隔离级别</span>
+<span class="token keyword">SHOW</span> VARIABLES <span class="token operator">LIKE</span> <span class="token string">'transaction_isolation'</span>
+
+<span class="token comment" spellcheck="true">#在事务A中</span>
 <span class="token keyword">begin</span>
-<span class="token keyword">SELECT</span> <span class="token operator">*</span> <span class="token keyword">FROM</span>  student  <span class="token keyword">LOCK</span> <span class="token operator">IN</span>  <span class="token keyword">SHARE MODE</span>
+<span class="token comment" spellcheck="true">#此时查询到的数据是  测试</span>
+<span class="token keyword">select</span>  <span class="token operator">*</span> <span class="token keyword">from</span>  student <span class="token keyword">where</span> id<span class="token operator">=</span><span class="token number">1</span>   
 
 
-<span class="token comment" spellcheck="true">#事务二</span>
-<span class="token keyword">begin</span> 
-<span class="token keyword">SELECT</span> <span class="token operator">*</span> <span class="token keyword">FROM</span>  student  <span class="token keyword">LOCK</span> <span class="token operator">IN</span>  <span class="token keyword">SHARE MODE</span>
-<span class="token comment" spellcheck="true">#成功  此时commit事务二</span>
+<span class="token comment" spellcheck="true">#在事务B中</span>
+
+<span class="token keyword">begin</span>
+ 
+<span class="token keyword">update</span>  student <span class="token keyword">set</span> name<span class="token operator">=</span><span class="token string">'测试11'</span>  <span class="token keyword">where</span> id<span class="token operator">=</span><span class="token number">1</span>
+
 <span class="token keyword">commit</span>
 
-<span class="token keyword">begin</span>
-<span class="token keyword">SELECT</span> <span class="token operator">*</span> <span class="token keyword">FROM</span>  student <span class="token keyword">for</span> <span class="token keyword">update</span> <span class="token comment" spellcheck="true">#失败  因为事务1  对该数据加了共享锁</span>
+<span class="token comment" spellcheck="true">#此时在事务A中读取到的数据是  </span>
+  测试<span class="token number">11</span> 
+这时就发生了不可重复读的问题
 
-<span class="token comment" spellcheck="true">#X锁  加X锁  也会被阻塞</span>
 
-<span class="token comment" spellcheck="true">#X锁  加S锁  也会被阻塞</span>
+
+
+<span class="token comment" spellcheck="true">#如果把事务隔离级别设置为  可重复读  就解决了可重复读的问题</span>
+<span class="token keyword">SET</span>  <span class="token keyword">SESSION</span> transaction_isolation <span class="token operator">=</span><span class="token string">'REPEATABLE-READ'</span>
 </code></pre>
-<p><strong>写操作必须加排它锁</strong><br><img src="https://img-blog.csdnimg.cn/bd4ab9375b2744769f3b51d4f7000eba.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5pmv5pmv5pmv5pmv6Imy5YiG5piOLg==,size_20,color_FFFFFF,t_70,g_se,x_16"><br><img src="https://img-blog.csdnimg.cn/3c16f7ca1c9f46c7911720641d594293.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5pmv5pmv5pmv5pmv6Imy5YiG5piOLg==,size_20,color_FFFFFF,t_70,g_se,x_16"></p>
-<h2 id="从数据操作的粒度划分"><a href="#从数据操作的粒度划分" class="headerlink" title="从数据操作的粒度划分"></a>从数据操作的粒度划分</h2><h3 id="表锁"><a href="#表锁" class="headerlink" title="表锁"></a>表锁</h3><p><img src="https://img-blog.csdnimg.cn/3e6c4eca22934585b5810f2da850d58f.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5pmv5pmv5pmv5pmv6Imy5YiG5piOLg==,size_20,color_FFFFFF,t_70,g_se,x_16"></p>
-<p>表级别的S和X锁<br><img src="https://img-blog.csdnimg.cn/46059c0143c84d019a04afef0595a0f0.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5pmv5pmv5pmv5pmv6Imy5YiG5piOLg==,size_20,color_FFFFFF,t_70,g_se,x_16"></p>
-<h3 id="意向锁"><a href="#意向锁" class="headerlink" title="意向锁"></a>意向锁</h3><p><img src="https://img-blog.csdnimg.cn/a290ef2025c4492ea0a843c0377bec5a.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5pmv5pmv5pmv5pmv6Imy5YiG5piOLg==,size_20,color_FFFFFF,t_70,g_se,x_16"><br>在我们对行数据加锁是会自动在其外层空间结构加一个意向锁 IX<br>这样可以方便告知这个数据页有数据加过锁了</p>
-<p>如果对表中一条数据加过X锁，那么另一个会话对表加锁是阻塞，因为意向锁（自动对表级别加IX）</p>
-<p>意向锁不会与行级的共享 / 排他锁互斥！正因为如此，意向锁并不会影响到多个事务对不同数据行加排<br>他锁时的并发性。（不然我们直接用普通的表锁就行了）<br><img src="https://img-blog.csdnimg.cn/2d885cd6b06e44088220a2c16ba72ccd.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5pmv5pmv5pmv5pmv6Imy5YiG5piOLg==,size_20,color_FFFFFF,t_70,g_se,x_16"></p>
-<p><img src="https://img-blog.csdnimg.cn/c9c63a3795584d4cb585317246b88eaa.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5pmv5pmv5pmv5pmv6Imy5YiG5piOLg==,size_20,color_FFFFFF,t_70,g_se,x_16"><br><img src="https://img-blog.csdnimg.cn/fbf01bf07306406dbfaeae91c6b7cfd3.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5pmv5pmv5pmv5pmv6Imy5YiG5piOLg==,size_18,color_FFFFFF,t_70,g_se,x_16"></p>
-<p>比如对一个id=5数据加行锁，自动会对整个表加一个意向锁IX，这是另一个事务对id=6加锁是不受影响的</p>
-<h3 id="自增锁"><a href="#自增锁" class="headerlink" title="自增锁"></a>自增锁</h3><p><img src="https://img-blog.csdnimg.cn/7ca4fa7ebd9240ef93103c8d130537e0.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5pmv5pmv5pmv5pmv6Imy5YiG5piOLg==,size_20,color_FFFFFF,t_70,g_se,x_16"></p>
-<h3 id="元数据锁（MDL）锁"><a href="#元数据锁（MDL）锁" class="headerlink" title="元数据锁（MDL）锁"></a>元数据锁（MDL）锁</h3><p><img src="https://img-blog.csdnimg.cn/286e96c1b3f9484a82e9d6f6f1394f63.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5pmv5pmv5pmv5pmv6Imy5YiG5piOLg==,size_20,color_FFFFFF,t_70,g_se,x_16"><br>MDL的读锁之间是可以同时增删查改的 ，但是如果有一个MDL写锁这是就会阻塞</p>
-<p>比如我们遇到一种情况   一个事务正在读一个表的内容这时会加MDL的读锁，这时另一个事务要更改表结构这时要加MDL的写锁，这个事务被阻塞了。这时又来一个事务要读，这时就会阻塞</p>
-<h3 id="行锁"><a href="#行锁" class="headerlink" title="行锁"></a>行锁</h3><p>InnoDB与MyISAM最大区别：①支持索引  ②采用行级锁       </p>
-<pre class=" language-sql"><code class="language-sql"><span class="token comment" spellcheck="true">#事务1</span>
-<span class="token keyword">begin</span>
-<span class="token keyword">update</span> student <span class="token keyword">set</span> name<span class="token operator">=</span><span class="token string">'测试'</span> <span class="token keyword">where</span> id<span class="token operator">=</span><span class="token number">1</span>  <span class="token comment" spellcheck="true">#这是mysql会自动给改行加上X锁</span>
-
-<span class="token comment" spellcheck="true">#事务2</span>
-<span class="token keyword">begin</span>
-<span class="token keyword">select</span> <span class="token operator">*</span>  <span class="token keyword">from</span>  student <span class="token keyword">where</span> id<span class="token operator">=</span><span class="token number">1</span>   <span class="token comment" spellcheck="true">#可以读到</span>
-<span class="token keyword">select</span> <span class="token operator">*</span>  <span class="token keyword">from</span>  student <span class="token keyword">where</span> id<span class="token operator">=</span><span class="token number">1</span>  <span class="token keyword">lock</span> <span class="token operator">in</span> <span class="token keyword">share mode</span> <span class="token comment" spellcheck="true">#阻塞</span>
-
- <span class="token comment" spellcheck="true">#直到事务1  commit才能读取到</span>
-</code></pre>
-<p> <img src="https://img-blog.csdnimg.cn/904f03f76da248939b4fb68b0410657a.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5pmv5pmv5pmv5pmv6Imy5YiG5piOLg==,size_20,color_FFFFFF,t_70,g_se,x_16"></p>
-<h3 id="间隙锁"><a href="#间隙锁" class="headerlink" title="间隙锁"></a>间隙锁</h3><p> <img src="https://img-blog.csdnimg.cn/013cca945ab9442d840b5ac19f6e3d5c.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5pmv5pmv5pmv5pmv6Imy5YiG5piOLg==,size_20,color_FFFFFF,t_70,g_se,x_16"><br> 可以多次去加</p>
-<h3 id="临键锁"><a href="#临键锁" class="headerlink" title="临键锁"></a>临键锁</h3><p> <img src="https://img-blog.csdnimg.cn/2d16f995acfc4a5997900303b25a9efc.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5pmv5pmv5pmv5pmv6Imy5YiG5piOLg==,size_20,color_FFFFFF,t_70,g_se,x_16"></p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/344692099">https://www.zhihu.com/question/344692099</a> 来自知乎一个回答</p>
+</blockquote>
+<p><strong>问题是既然MySQL有事物隔离性，那为什么还会产生脏读？</strong></p>
+<p>这个事情不能简单的一概而论，还得结合锁和MVCC相关的知识来分析<br>一个select操作</p>
+<p>如果不加锁（普通的select等），称为快照读，读取的是MVCC版本链里的快照版本（至于读哪一版本的数据，就得看隔离级别了）</p>
+<p>如果加了锁（如select for update等），称为当前读，读取的是最新版本（也就是别的事务提交的版本）</p>
+<p>所以这样就很清晰了：</p>
+<p>在事务隔离级别为读未提交的情况下，事务B读取到的可能是事务A未提交的存在于版本链里的数据，这样就是脏读了。</p>
+<p>有人可能是数据不是加锁了吗，为啥还能读？</p>
+<p>我读取的是版本链里的数据，你加锁是加在最新落库的数据表里的表记录，跟我有什么关系？</p>
+<p>所以最终结果就很清楚了，并不是一级封锁协议不能避免度脏数据，想下面这两周情况就不会发生脏读：</p>
+<p>1）在非读未提交（读已提交、可重复读、串行化）隔离别下，不会出现脏读</p>
+<p>2）在select加锁的情况下，不管什么级别，也不会出现脏读</p>
 
                 
             </div>
@@ -553,7 +547,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://zhefu-jy.github.io/2022/03/07/mysql20220307/">https://zhefu-jy.github.io/2022/03/07/mysql20220307/</a>
+                    <a href="https://zhefu-jy.github.io/2022/03/08/mysql20220308/">https://zhefu-jy.github.io/2022/03/08/mysql20220308/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -764,9 +758,10 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
                 <a href="/2022/03/08/mysql20220308/">
                     <div class="card-image">
@@ -784,9 +779,9 @@
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2022-03-08
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2022-03-08
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-user fa-fw"></i>
@@ -795,6 +790,7 @@
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
@@ -813,13 +809,13 @@
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2022/03/04/mybatis-review/">
+                <a href="/2022/03/07/mysql20220307/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/1.jpg" class="responsive-img" alt="mybatis复习">
+                        <img src="/medias/featureimages/0.jpg" class="responsive-img" alt="mysql锁">
                         
-                        <span class="card-title">mybatis复习</span>
+                        <span class="card-title">mysql锁</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -830,7 +826,7 @@
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2022-03-04
+                                <i class="far fa-clock fa-fw icon-date"></i>2022-03-07
                             </span>
                         <span class="publish-author">
                             
@@ -843,8 +839,8 @@
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/%E6%A1%86%E6%9E%B6/">
-                        <span class="chip bg-color">框架</span>
+                    <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/">
+                        <span class="chip bg-color">数据库</span>
                     </a>
                     
                 </div>
