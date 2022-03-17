@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="mysql事务隔离级别, 蛰伏">
+    <meta name="keywords" content="ArrayList扩容机制, 蛰伏">
     <meta name="description" content="不要停下学习的脚步">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>mysql事务隔离级别 | 蛰伏</title>
+    <title>ArrayList扩容机制 | 蛰伏</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -310,12 +310,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/4.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/0.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">mysql事务隔离级别</h1>
+                    <h1 class="description center-align post-title">ArrayList扩容机制</h1>
                 </div>
             </div>
         </div>
@@ -431,8 +431,8 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/">
-                                <span class="chip bg-color">数据库</span>
+                            <a href="/tags/Java%E5%9F%BA%E7%A1%80/">
+                                <span class="chip bg-color">Java基础</span>
                             </a>
                         
                     </div>
@@ -447,7 +447,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2022-03-08
+                    2022-03-17
                 </div>
                 
 
@@ -468,59 +468,87 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="四种隔离级别"><a href="#四种隔离级别" class="headerlink" title="四种隔离级别"></a>四种隔离级别</h2><p>我们愿意舍弃一部分隔离性来换取一部分性能在这里就体现在：设立一些隔离级别隔离级别越低并发问题发生的就越多。 </p>
-<p>SQL标准 中设立了4个 隔离级别 ： </p>
-<p>READ UNCOMMITTED ：读未提交，在该隔离级别，所有事务都可以看到其他未提交事务的执行结果。不能避免脏读、不可重复读、幻读。</p>
-<p>READ COMMITTED ：读已提交，它满足了隔离的简单定义：一个事务只能看见已经提交事务所做的改变。这是大多数数据库系统的默认隔离级别（但不是MySQL默认的）。可以避免脏读，但不可重复读、幻读问题仍然存在。</p>
-<p>REPEATABLE READ ：可重复读，事务A在读到一条数据之后，此时事务B对该数据进行了修改并提交，那么事务A再读该数据，读到的还是原来的内容。可以避免脏读、不可重复读，但幻读问题仍然存在。这是MySQL的默认隔离级别。</p>
-<p>SERIALIZABLE ：可串行化，确保事务可以从一个表中读取相同的行。在这个事务持续期间，禁止其他事务对该表执行插入、更新和删除操作。所有的并发问题都可以避免，但性能十分低下。能避免脏读、不可重复读和幻读。</p>
-<h2 id="不可重复读问题"><a href="#不可重复读问题" class="headerlink" title="不可重复读问题"></a>不可重复读问题</h2><p>在读已提交的事务隔离级别并没有解决不可重复读的问题</p>
-<p>测试</p>
-<pre class=" language-sql"><code class="language-sql"><span class="token comment" spellcheck="true">#设置事务隔离级别  设置为读已提交</span>
-<span class="token keyword">SET</span>  <span class="token keyword">SESSION</span> transaction_isolation <span class="token operator">=</span><span class="token string">'READ-COMMITTED'</span>
+                <h1 id="ArrayList的扩容机制"><a href="#ArrayList的扩容机制" class="headerlink" title="ArrayList的扩容机制"></a>ArrayList的扩容机制</h1><p>对这段代码进行分析</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">package</span> ArrayListSourceCode<span class="token punctuation">;</span>
 
+<span class="token keyword">import</span> java<span class="token punctuation">.</span>util<span class="token punctuation">.</span>ArrayList<span class="token punctuation">;</span>
 
-<span class="token comment" spellcheck="true">#查看事务隔离级别</span>
-<span class="token keyword">SHOW</span> VARIABLES <span class="token operator">LIKE</span> <span class="token string">'transaction_isolation'</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">SourceCode</span> <span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        ArrayList list <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ArrayList</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+       <span class="token comment" spellcheck="true">// ArrayList list = new ArrayList(8);</span>
+        <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span> i <span class="token operator">&lt;=</span><span class="token number">10</span> <span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            list<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i<span class="token operator">=</span><span class="token number">11</span><span class="token punctuation">;</span>i<span class="token operator">&lt;=</span><span class="token number">15</span><span class="token punctuation">;</span>i<span class="token operator">++</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+            list<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        list<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token number">100</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        list<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token number">200</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        list<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span>null<span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-<span class="token comment" spellcheck="true">#在事务A中</span>
-<span class="token keyword">begin</span>
-<span class="token comment" spellcheck="true">#此时查询到的数据是  测试</span>
-<span class="token keyword">select</span>  <span class="token operator">*</span> <span class="token keyword">from</span>  student <span class="token keyword">where</span> id<span class="token operator">=</span><span class="token number">1</span>   
-
-
-<span class="token comment" spellcheck="true">#在事务B中</span>
-
-<span class="token keyword">begin</span>
- 
-<span class="token keyword">update</span>  student <span class="token keyword">set</span> name<span class="token operator">=</span><span class="token string">'测试11'</span>  <span class="token keyword">where</span> id<span class="token operator">=</span><span class="token number">1</span>
-
-<span class="token keyword">commit</span>
-
-<span class="token comment" spellcheck="true">#此时在事务A中读取到的数据是  </span>
-  测试<span class="token number">11</span> 
-这时就发生了不可重复读的问题
-
-
-
-
-<span class="token comment" spellcheck="true">#如果把事务隔离级别设置为  可重复读  就解决了可重复读的问题</span>
-<span class="token keyword">SET</span>  <span class="token keyword">SESSION</span> transaction_isolation <span class="token operator">=</span><span class="token string">'REPEATABLE-READ'</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
 </code></pre>
-<blockquote>
-<p><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/344692099">https://www.zhihu.com/question/344692099</a> 来自知乎一个回答</p>
-</blockquote>
-<p><strong>问题是既然MySQL有事物隔离性，那为什么还会产生脏读？</strong></p>
-<p>这个事情不能简单的一概而论，还得结合锁和MVCC相关的知识来分析<br>一个select操作</p>
-<p>如果不加锁（普通的select等），称为快照读，读取的是MVCC版本链里的快照版本（至于读哪一版本的数据，就得看隔离级别了）</p>
-<p>如果加了锁（如select for update等），称为当前读，读取的是最新版本（也就是别的事务提交的版本）</p>
-<p>所以这样就很清晰了：</p>
-<p>在事务隔离级别为读未提交的情况下，事务B读取到的可能是事务A未提交的存在于版本链里的数据，这样就是脏读了。</p>
-<p>有人可能是数据不是加锁了吗，为啥还能读？</p>
-<p>我读取的是版本链里的数据，你加锁是加在最新落库的数据表里的表记录，跟我有什么关系？</p>
-<p>所以最终结果就很清楚了，并不是一级封锁协议不能避免度脏数据，想下面这两周情况就不会发生脏读：</p>
-<p>1）在非读未提交（读已提交、可重复读、串行化）隔离别下，不会出现脏读</p>
-<p>2）在select加锁的情况下，不管什么级别，也不会出现脏读</p>
+<h2 id="从无参构造开始"><a href="#从无参构造开始" class="headerlink" title="从无参构造开始"></a>从无参构造开始</h2><pre class=" language-java"><code class="language-java"> <span class="token keyword">public</span> <span class="token function">ArrayList</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+ <span class="token keyword">this</span><span class="token punctuation">.</span>elementData<span class="token operator">=</span>DEFAULTCAPACITY_EMPTY_ELEMENTDATA<span class="token punctuation">;</span>
+ <span class="token comment" spellcheck="true">//private static final Object[] DEFAULTCAPACITY_EMPTY_ELEMENTDATA = {};是一个空对象  赋给elementData</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>在第一次进行for循环准备添加值是  才开始准备扩容<br>首先是自动装箱的过程</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> Integer <span class="token function">valueOf</span><span class="token punctuation">(</span><span class="token keyword">int</span> i<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>i <span class="token operator">>=</span> IntegerCache<span class="token punctuation">.</span>low <span class="token operator">&amp;&amp;</span> i <span class="token operator">&lt;=</span> IntegerCache<span class="token punctuation">.</span>high<span class="token punctuation">)</span>
+            <span class="token keyword">return</span> IntegerCache<span class="token punctuation">.</span>cache<span class="token punctuation">[</span>i <span class="token operator">+</span> <span class="token punctuation">(</span><span class="token operator">-</span>IntegerCache<span class="token punctuation">.</span>low<span class="token punctuation">)</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">Integer</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+</code></pre>
+<p>然后来到这句源码</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">boolean</span> <span class="token function">add</span><span class="token punctuation">(</span>E e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token function">ensureCapacityInternal</span><span class="token punctuation">(</span>size <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment" spellcheck="true">// Increments modCount!!</span>
+        elementData<span class="token punctuation">[</span>size<span class="token operator">++</span><span class="token punctuation">]</span> <span class="token operator">=</span> e<span class="token punctuation">;</span>
+        <span class="token keyword">return</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+</code></pre>
+<p>先确定是否要扩容  然后进行复制</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">private</span> <span class="token keyword">void</span> <span class="token function">ensureCapacityInternal</span><span class="token punctuation">(</span><span class="token keyword">int</span> minCapacity<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token function">ensureExplicitCapacity</span><span class="token punctuation">(</span><span class="token function">calculateCapacity</span><span class="token punctuation">(</span>elementData<span class="token punctuation">,</span> minCapacity<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+</code></pre>
+<p>ensureCapacityInternal中又调用了 ensureExplicitCapacity这个方法</p>
+<pre class=" language-java"><code class="language-java">  <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">int</span> <span class="token function">calculateCapacity</span><span class="token punctuation">(</span>Object<span class="token punctuation">[</span><span class="token punctuation">]</span> elementData<span class="token punctuation">,</span> <span class="token keyword">int</span> minCapacity<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>elementData <span class="token operator">==</span> DEFAULTCAPACITY_EMPTY_ELEMENTDATA<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">return</span> Math<span class="token punctuation">.</span><span class="token function">max</span><span class="token punctuation">(</span>DEFAULT_CAPACITY<span class="token punctuation">,</span> minCapacity<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">return</span> minCapacity<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+</code></pre>
+<pre><code>首先执行这个方法  当elementData是当初赋的空对象是 就把默认容量和要求最小容量取最大值  所以返回10
+</code></pre>
+<pre class=" language-java"><code class="language-java"> <span class="token keyword">private</span> <span class="token keyword">void</span> <span class="token function">ensureExplicitCapacity</span><span class="token punctuation">(</span><span class="token keyword">int</span> minCapacity<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        modCount<span class="token operator">++</span><span class="token punctuation">;</span>  <span class="token comment" spellcheck="true">//记录集合被修改的次数</span>
+
+        <span class="token comment" spellcheck="true">// overflow-conscious code</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>minCapacity <span class="token operator">-</span> elementData<span class="token punctuation">.</span>length <span class="token operator">></span> <span class="token number">0</span><span class="token punctuation">)</span>
+            <span class="token function">grow</span><span class="token punctuation">(</span>minCapacity<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+</code></pre>
+<p>此时进入grow函数进行扩容</p>
+<pre class=" language-java"><code class="language-java"> <span class="token keyword">private</span> <span class="token keyword">void</span> <span class="token function">grow</span><span class="token punctuation">(</span><span class="token keyword">int</span> minCapacity<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment" spellcheck="true">// overflow-conscious code</span>
+        <span class="token comment" spellcheck="true">//minCapacity=10</span>
+        <span class="token keyword">int</span> oldCapacity <span class="token operator">=</span> elementData<span class="token punctuation">.</span>length<span class="token punctuation">;</span>
+        <span class="token keyword">int</span> newCapacity <span class="token operator">=</span> oldCapacity <span class="token operator">+</span> <span class="token punctuation">(</span>oldCapacity <span class="token operator">>></span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>newCapacity <span class="token operator">-</span> minCapacity <span class="token operator">&lt;</span> <span class="token number">0</span><span class="token punctuation">)</span>
+            newCapacity <span class="token operator">=</span> minCapacity<span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>newCapacity <span class="token operator">-</span> MAX_ARRAY_SIZE <span class="token operator">></span> <span class="token number">0</span><span class="token punctuation">)</span>
+            newCapacity <span class="token operator">=</span> <span class="token function">hugeCapacity</span><span class="token punctuation">(</span>minCapacity<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment" spellcheck="true">// minCapacity is usually close to size, so this is a win:</span>
+        elementData <span class="token operator">=</span> Arrays<span class="token punctuation">.</span><span class="token function">copyOf</span><span class="token punctuation">(</span>elementData<span class="token punctuation">,</span> newCapacity<span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token punctuation">}</span>
+</code></pre>
+<p>于是此时newCapacity为10<br>Arrays.copyOf拷贝原来elementData数据，放到新的newCapacity中 </p>
+<p>当容量不够时扩容是  oldCapacity + (oldCapacity &gt;&gt; 1);为1.5倍</p>
+<h2 id="有参构造"><a href="#有参构造" class="headerlink" title="有参构造"></a>有参构造</h2><p>同理</p>
 
                 
             </div>
@@ -547,7 +575,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://zhefu-jy.github.io/2022/03/08/mysql20220308/">https://zhefu-jy.github.io/2022/03/08/mysql20220308/</a>
+                    <a href="https://zhefu-jy.github.io/2022/03/17/ArrayList/">https://zhefu-jy.github.io/2022/03/17/ArrayList/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -585,8 +613,8 @@
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/">
-                                    <span class="chip bg-color">数据库</span>
+                                <a href="/tags/Java%E5%9F%BA%E7%A1%80/">
+                                    <span class="chip bg-color">Java基础</span>
                                 </a>
                             
                         </div>
@@ -758,9 +786,10 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
                 <a href="/2022/03/17/ArrayList/">
                     <div class="card-image">
@@ -778,9 +807,9 @@
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2022-03-17
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2022-03-17
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-user fa-fw"></i>
@@ -789,6 +818,7 @@
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
@@ -807,13 +837,13 @@
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2022/03/07/mysql20220307/">
+                <a href="/2022/03/08/mysql20220308/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/0.jpg" class="responsive-img" alt="mysql锁">
+                        <img src="/medias/featureimages/4.jpg" class="responsive-img" alt="mysql事务隔离级别">
                         
-                        <span class="card-title">mysql锁</span>
+                        <span class="card-title">mysql事务隔离级别</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -824,7 +854,7 @@
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2022-03-07
+                                <i class="far fa-clock fa-fw icon-date"></i>2022-03-08
                             </span>
                         <span class="publish-author">
                             
